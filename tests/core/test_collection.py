@@ -279,3 +279,18 @@ def test_from_dict_with_sequence_and_empty_tuple():
     result = from_dict(X, {"s": ()})
 
     assert result == X(s=())
+
+
+def test_from_dict_with_sequence_of_dataclasses():
+    @dataclass
+    class X:
+        a: int
+
+    @dataclass
+    class Y:
+        b: Sequence[X]
+
+
+    result = from_dict(Y, {"b": ({"a": 1}, {"a": 2})})
+
+    assert result == Y(b=(X(a=1), X(a=2)))
